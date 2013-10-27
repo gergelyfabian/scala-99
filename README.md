@@ -10,6 +10,7 @@ of Ninety-Nine Prolog Problems.
 
 See [Ninety-Nine Haskell Problems](http://www.haskell.org/haskellwiki/H-99:_Ninety-Nine_Haskell_Problems)
 for more info.
+Also see [Phil Gold's S-99](http://aperiodic.net/phil/scala/s-99/) for a more Scala-specific definition of the problems.
 
 How to compile/edit/use
 -------------------

@@ -2,7 +2,7 @@ package scala99
 
 import scala.annotation.tailrec
 
-object Questions1To10 {
+object Questions01To10 {
   /**
    * Problem 01
    *

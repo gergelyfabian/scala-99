@@ -5,10 +5,10 @@ import org.scalatest.FunSuite
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
-import Questions1To10._
+import Questions01To10._
 
 @RunWith(classOf[JUnitRunner])
-class Questions1To10Suite extends FunSuite {
+class Questions01To10Suite extends FunSuite {
 
   test("problem01: last: empty list") {
     intercept[NoSuchElementException] {

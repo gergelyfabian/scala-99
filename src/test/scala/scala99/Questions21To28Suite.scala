@@ -104,4 +104,35 @@ class Questions21To28Suite extends FunSuite {
       lotto(12, 10)
     }
   }
+
+  test("problem25: randomPermute") {
+    val origList = "abcdefg".toList
+    val len = origList.length
+    for (i <- 1 to 5) {
+      val selectedList = randomPermute(origList)
+      assert(selectedList.length === len)
+      assert(selectedList.toSet === origList.toSet)
+    }
+  }
+
+  test("problem26: combinations: (4,2)") {
+    val origList = "abcd".toList
+    assert(combinations(origList, 2).toSet ===
+      Set(List('c', 'd'), List('b', 'd'), List('b', 'c'), List('a', 'd'), List('a', 'c'), List('a', 'b')))
+  }
+
+  test("problem26: combinations: (3,3)") {
+    val origList = "abc".toList
+    assert(combinations(origList, 3).toSet === Set(origList))
+  }
+
+  test("problem28: lsort") {
+    assert(lsort(List(List('a', 'b', 'c', 'd'), List('a', 'b', 'c'), List('a'), List('a', 'b'))) ===
+      List(List('a'), List('a', 'b'), List('a', 'b', 'c'), List('a', 'b', 'c', 'd')))
+  }
+
+  test("problem28: lsortFreq") {
+    assert(lsortFreq(List(List('a', 'b', 'c', 'd'), List('a', 'b', 'c'), List('a'), List('a', 'b'), List('b'), List('c', 'd'), List('e'))) ===
+      List(List('a', 'b', 'c'), List('a', 'b', 'c', 'd'), List('c', 'd'), List('a', 'b'), List('e'), List('b'), List('a')))
+  }
 }

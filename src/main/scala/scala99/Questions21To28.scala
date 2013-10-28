@@ -95,4 +95,137 @@ object Questions21To28 {
       randomSelect(numbers, count)
     }
   }
+
+  /**
+   * Problem 25
+   *
+   * Generate a random permutation of the elements of a list.
+   *
+   * Example:
+   *   randomPermute("abcde".toList) => List('c', 'b', 'd', 'e', 'a')
+   */
+  def randomPermute[T](list: List[T]): List[T] = {
+    val len = list.length
+    randomSelect(list, len)
+  }
+
+  /**
+   * Problem 26
+   *
+   * Generate the combinations of K distinct objects chosen from the N elements of a list.
+   *
+   * In how many ways can a committee of 3 be chosen from a group of 12 people?
+   * We all know that there are C(12,3) = 220 possibilities (C(N,K) denotes the well-known
+   * binomial coefficient). For pure mathematicians, this result may be great.
+   * But we want to really generate all the possibilities.
+   *
+   * Example:
+   *   combinations(List('a, 'b, 'c), 2) === List(List('b, 'c), List('a, 'c), List('a, 'b))
+   */
+  def combinations[T](list: List[T], count: Int): List[List[T]] = {
+    def combinationsInt(list: List[T], acc: List[List[T]], count: Int, current: Int, tmpList: List[T]): List[List[T]] = {
+      // When we reached the count, add the gathered elements to acc.
+      if (current == count) tmpList :: acc
+      else
+        list match {
+          case Nil =>
+            // If we reached the list's end without reaching count, then do not add tmpList.
+            acc
+          case x :: xs =>
+            // Take both "left" and "right" paths in the "tree" of solutions
+            // (left tree takes this element, the right tree doesn't take it).
+            val withTaken = combinationsInt(xs, acc, count, current + 1, x :: tmpList)
+            val withNotTaken = combinationsInt(xs, withTaken, count, current, tmpList)
+            withNotTaken
+        }
+    }
+    combinationsInt(list.reverse, List(), count, 0, List())
+  }
+
+  /**
+   * Problem 28
+   *
+   * Sorting a list of lists according to length of sublists.
+   *
+   * a) We suppose that a list contains elements that are lists themselves.
+   *    The objective is to sort the elements of the list according to their length.
+   *    E.g. short lists first, longer lists later, or vice versa.
+   *
+   * Example:
+   *   lsort(List(List('a', 'b', 'c', 'd'), List('a', 'b', 'c'), List('a'), List('a', 'b'))) ===
+   *     List(List('a'), List('a', 'b'), List('a', 'b', 'c'), List('a', 'b', 'c', 'd'))
+   */
+  def lsort[T](list: List[List[T]]): List[List[T]] = {
+    def lsortInt(list: List[(List[T], Int)]): List[(List[T], Int)] = {
+      def mergeLists(xs: List[(List[T], Int)], ys: List[(List[T], Int)]): List[(List[T], Int)] = {
+        (xs, ys) match {
+          case (x :: xs1, y :: ys1) =>
+            if (x._2 < y._2) x :: mergeLists(xs1, ys)
+            else y :: mergeLists(xs, ys1)
+          case (Nil, _) =>
+            ys
+          case (_, Nil) =>
+            xs
+        }
+      }
+      val n = list.length
+      if (n == 1) list
+      else {
+        val (left, right) = list.splitAt(n / 2)
+        val leftOrdered = lsortInt(left)
+        val rightOrdered = lsortInt(right)
+        mergeLists(leftOrdered, rightOrdered)
+      }
+    }
+    val listWithLengths = list.map { x => (x, x.length) }
+    lsortInt(listWithLengths).map { x => x._1 }
+  }
+
+  /**
+   * Problem 28
+   *
+   * Sorting a list of lists according to length of sublists.
+   *
+   * b) Again, we suppose that a list contains elements that are lists themselves.
+   *    But this time the objective is to sort the elements according to their length
+   *    frequency; i.e. in the default, sorting is done ascendingly, lists with rare
+   *    lengths are placed, others with a more frequent length come later.
+   *
+   * Example:
+   *   lsortFreq(List(List('a', 'b', 'c', 'd'), List('a', 'b', 'c'), List('a'), List('a', 'b'), List('b'), List('c', 'd'), List('e'))) ===
+   *     List(List('a', 'b', 'c'), List('a', 'b', 'c', 'd'), List('c', 'd'), List('a', 'b'), List('e'), List('b'), List('a'))
+   */
+  def lsortFreq[T](list: List[List[T]]): List[List[T]] = {
+    val listWithLengths = list.map { x => (x, x.length) }
+    val listLengths = listWithLengths.foldLeft(Map[Int, Int]()) {
+      case (z, (_, len)) =>
+        z.get(len) match {
+          case Some(oldLen) => z updated (len, z(len) + 1)
+          case None => z updated (len, 1)
+        }
+    }
+    def lsortFreqInt(list: List[(List[T], Int)]): List[(List[T], Int)] = {
+      def mergeLists(xs: List[(List[T], Int)], ys: List[(List[T], Int)]): List[(List[T], Int)] = {
+        (xs, ys) match {
+          case (x :: xs1, y :: ys1) =>
+            if (listLengths(x._2) < listLengths(y._2)) x :: mergeLists(xs1, ys)
+            else y :: mergeLists(xs, ys1)
+          case (Nil, _) =>
+            ys
+          case (_, Nil) =>
+            xs
+        }
+      }
+      val n = list.length
+      if (n == 1) list
+      else {
+        val (left, right) = list.splitAt(n / 2)
+        val leftOrdered = lsortFreqInt(left)
+        val rightOrdered = lsortFreqInt(right)
+        mergeLists(leftOrdered, rightOrdered)
+      }
+    }
+
+    lsortFreqInt(listWithLengths).map { x => x._1 }
+  }
 }

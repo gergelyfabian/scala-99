@@ -24,6 +24,7 @@ object Questions31To41 {
    * Example:
    *   gcd(36, 63) === 9
    */
+  @tailrec
   def gcd(a: Int, b: Int): Int = {
     if (a == 0) b
     else if (b == 0) a
@@ -71,6 +72,7 @@ object Questions31To41 {
    *   primeFactors(108) === List(2, 2, 3, 3, 3)
    */
   def primeFactors(n: Int): List[Int] = {
+    @tailrec
     def primeFactorsInt(n: Int, acc: List[Int]): List[Int] = {
       val prime = (2 to n / 2).find { x => n % x == 0 }
       prime match {
@@ -97,6 +99,7 @@ object Questions31To41 {
         case _ => (num, 1) :: list
       }
     }
+    @tailrec
     def primeFactorMultiplicityInt(n: Int, acc: List[(Int, Int)]): List[(Int, Int)] = {
       val prime = (2 to n / 2).find { x => n % x == 0 }
       prime match {
